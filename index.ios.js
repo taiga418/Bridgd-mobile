@@ -1,34 +1,10 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
+
 var React = require('react-native');
-var request = new XMLHttpRequest();
+var styles = require('./styles.js')
+var { apiParams, searchURL } = require('./config.js')
+var { AppRegistry, Text, View, TextInput, ListView, Image, TouchableHighlight } = React;
 
-var {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  ListView,
-  Image,
-  TouchableHighlight
-} = React;
-
-var apiParams = {
-  key: 'AIzaSyA-2P-UjlhcwiMC4P6z0z9f-SU7s4FMIJQ',
-  type: 'video',
-  maxResults: '8',
-  part: 'id,snippet',
-  fields: 'items/id,items/snippet/title,items/snippet/description,items/snippet/thumbnails/default,items/snippet/channelTitle',
-}
-
-var querystring = Object.keys(apiParams)
-  .map(key => key + '=' + encodeURIComponent(apiParams[key]))
-  .join('&');
-
-const searchString = 'https://www.googleapis.com/youtube/v3/search?' + querystring;
+const searchString = searchURL;
 
 var BridgdMobile = React.createClass({
 
@@ -38,20 +14,16 @@ var BridgdMobile = React.createClass({
     }
   },
 
-  search: function(query) {
-    if(query.length > 2){
-      console.log(query)
-      var qer = '&q=' + encodeURIComponent(query);
-      var s = searchString
-      s += qer
-      fetch(s).then(response => response.json())
+  search: function(search) {
+    if(search.length > 2){
+      var query = '&q=' + encodeURIComponent(search);
+      fetch(searchString + query).then(response => response.json())
         .then(responseData => this.setState({results: responseData.items}));
     }
    
   },
 
   onPress: function(video) {
-    //console.log(typeof video, video)
     fetch('http:localhost:3000/enqueue', {
       method: 'POST',
       headers: {
@@ -63,7 +35,6 @@ var BridgdMobile = React.createClass({
   },
 
   renderRow: function(item){
-
     return(
       <TouchableHighlight onPress={() => this.onPress(item)}>
         <View>
@@ -104,27 +75,6 @@ var BridgdMobile = React.createClass({
   }
 });
 
-var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-  button: {
-    borderWidth: 1, 
-    borderColor: 'blue'
-  }
-});
+
 
 AppRegistry.registerComponent('BridgdMobile', () => BridgdMobile);
