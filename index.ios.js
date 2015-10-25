@@ -16,8 +16,9 @@ var BridgdMobile = React.createClass({
   render: function() {
     return (
       <ScrollableTabView>
-        <Queue tabLabel="Queue"/>
         <Search tabLabel="Search"/>
+      
+        <Queue tabLabel="Queue"/>
       </ScrollableTabView>
     ); 
   }

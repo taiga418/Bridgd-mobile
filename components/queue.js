@@ -1,6 +1,6 @@
 var React = require('react-native');
 var styles = require('../styles.js')
-var { apiParams, searchURL } = require('../config.js')
+var { apiParams, searchURL, config } = require('../config.js')
 var { AppRegistry, Text, View, TextInput, ListView, Image, TouchableHighlight, PropTypes } = React;
 
 
@@ -14,7 +14,7 @@ var QueueView = React.createClass({
   },
 
   componentDidMount: function(){
-    fetch('http:localhost:3000/queue')
+    fetch(config.url + 'queue')
     .then((data) => data.json())
     .then((response) => {
       this.setState({queue: response.queue.queue})
@@ -24,9 +24,20 @@ var QueueView = React.createClass({
     })
   },
 
+  onPressHandler: function(video){
+    fetch(config.url + 'load', {
+      method: 'POST',
+      headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(video)
+    })
+  },
+
   renderRow: function(item){
     return(
-      <TouchableHighlight>
+      <TouchableHighlight onPress={this.onPressHandler.bind(null, item)}>
         <View>
           <Text>{item.snippet.title}</Text>
           <Text>id : {item.id.videoId}</Text> 

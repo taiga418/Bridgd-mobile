@@ -12,4 +12,8 @@ var querystring = Object.keys(apiParams)
 
 var searchURL = 'https://www.googleapis.com/youtube/v3/search?' + querystring;
 
- module.exports = { apiParams, searchURL };
+var config ={
+  url: 'http:localhost:3000/'
+}
+
+ module.exports = { apiParams, searchURL, config};

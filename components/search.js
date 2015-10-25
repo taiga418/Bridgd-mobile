@@ -1,7 +1,9 @@
 
 var React = require('react-native');
+var Button = require('react-native-button');
+//var SearchBar = reqire('react-native-search-bar')
 var styles = require('../styles.js')
-var { apiParams, searchURL } = require('../config.js')
+var { apiParams, searchURL, config } = require('../config.js')
 var { AppRegistry, Text, View, TextInput, ListView, Image, TouchableHighlight } = React;
 
 const searchString = searchURL;
@@ -11,21 +13,22 @@ var SearchView = React.createClass({
   
   getInitialState: function(){
     return {
-      results: null
+      results: null,
+      search: null
     }
   },
 
-  search: function(search) {
-    if(search.length > 2){
-      var query = '&q=' + encodeURIComponent(search);
+  search: function() {
+    let text = this.state.search
+    if(text){
+      let query = '&q=' + encodeURIComponent(text);
       fetch(searchString + query).then(response => response.json())
         .then(responseData => this.setState({results: responseData.items}));
     }
-   
   },
 
   onPress: function(video) {
-    fetch('http:localhost:3000/enqueue', {
+    fetch(config.url + 'enqueue', {
       method: 'POST',
       headers: {
        'Accept': 'application/json',
@@ -68,11 +71,12 @@ var SearchView = React.createClass({
   render: function() {
     return (
       <View style={styles.container}>
-        <Text>Search for songs</Text>
-        <TextInput
-          style={{height: 40, borderColor: "gray", borderWidth: 1}}
-          onChangeText={(text) => this.search(text)}/>
-        {this.getResults()}
+        <Text style={styles.header}>Search Youtube for Videos</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={(text) => this.setState({search: text})}/>
+          <Button style={styles.button} onPress={this.search}>Search</Button>
+         {this.getResults()}
       </View>
       
     ); 
