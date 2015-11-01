@@ -6,23 +6,9 @@ var { AppRegistry, Text, View, TextInput, ListView, Image, TouchableHighlight, P
 
 var QueueView = React.createClass({
 
-  getInitialState: function(){
-    return{
-      queue: null,
-      errors: []
-    }
-  },
-
-  componentDidMount: function(){
-    fetch(config.url + 'queue')
-    .then((data) => data.json())
-    .then((response) => {
-      this.setState({queue: response.queue.queue})
-    }, err => {
-      let errors = this.state.errors.push(err)
-      this.setState({ error: errors})
-    })
-  },
+  // componentDidMount: function(){
+  //  //
+  // },
 
   onPressHandler: function(video){
     fetch(config.url + 'load', {
@@ -50,7 +36,12 @@ var QueueView = React.createClass({
 
 
   render: function(){
-    const{queue, errors} = this.state;
+    const {currentVideo, queue,errors} = this.props;
+    let title;
+    if(currentVideo){
+      title = currentVideo.snippet.title
+      console.log(currentVideo.snippet.title)
+    }
     if(errors.length >1){
       return(
         <View style={styles.container}>
@@ -69,7 +60,7 @@ var QueueView = React.createClass({
       let dataSource =  ds.cloneWithRows(queue);
       return(
         <View style={styles.container}>
-          <Text>Queue</Text>
+          <Text>Current: {title}</Text>
           <ListView
             dataSource={dataSource}
             renderRow={(rowData) => this.renderRow(rowData)}>

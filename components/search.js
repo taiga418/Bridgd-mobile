@@ -56,13 +56,12 @@ var SearchView = React.createClass({
       var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       var dataSource =  ds.cloneWithRows(this.state.results);
       return(
-        <View style={styles.container}>
+        <View style={styles.results}>
           <ListView
            dataSource={dataSource}
             renderRow={(rowData) => this.renderRow(rowData)}>
           </ListView>
         </View>
-
       )
      
     }
@@ -70,15 +69,17 @@ var SearchView = React.createClass({
 
   render: function() {
     return (
-      <View style={styles.container}>
+      <View style={styles.searchContainer}>
         <Text style={styles.header}>Search Youtube for Videos</Text>
+        <View style={styles.controlsContainer}>
           <TextInput
             style={styles.textInput}
             onChangeText={(text) => this.setState({search: text})}/>
           <Button style={styles.button} onPress={this.search}>Search</Button>
-         {this.getResults()}
+        </View>
+        {this.getResults()}
       </View>
-      
+
     ); 
   }
 });
