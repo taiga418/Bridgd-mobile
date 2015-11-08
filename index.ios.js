@@ -30,7 +30,6 @@ var BridgdMobile = React.createClass({
     this.socket.emit('joined');
 
     this.socket.on('queueUpdate', queue =>{
-      console.log('updated queu')
       this.setState({queue: queue})
     })
 
@@ -44,7 +43,7 @@ var BridgdMobile = React.createClass({
     fetch(config.url + 'queue')
     .then((data) => data.json())
     .then((response) => {
-      this.setState({queue: response.queue.queue})
+      this.setState({queue: response.queue, currentVideo: response.current})
     }, err => {
       let errors = this.state.errors.push(err)
       this.setState({ error: errors})
